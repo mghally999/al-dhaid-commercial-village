@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+/* Design tokens read from the Figma file (it has no variables; values are hard-coded there). */
+@theme {
+  --color-navy: #0b3565;
+  --color-navy-deep: #0c315e;
+  --color-navy-footer: #082849;
+  --color-amber: #f5a900;
+  --color-coral: #ef4e30;
+  --color-cream: #f6f5f0;
+  --color-mint: #e5ece6;
+  --color-mint-deep: #dce8e4;
+  --color-slate: #5d7490;
+  --color-slate-deep: #486180;
+  --color-slate-light: #6c8199;
+  --color-whatsapp: #4ac858;
+}
+
+@theme inline {
+  --font-sans: var(--font-alexandria), system-ui, sans-serif;
+  --font-heading: var(--font-kufi), var(--font-alexandria), system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply bg-cream text-navy-deep font-sans antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 2px;
+  }
+  section[id] {
+    scroll-margin-top: 1rem;
+  }
+}
+
+@layer components {
+  /* Floating WhatsApp: hidden over the hero, fades in after ~400px of scroll (CSS scroll-driven
+     animation, no JS). Browsers without support simply always show it. */
+  .reveal-on-scroll {
+    @supports (animation-timeline: scroll()) {
+      animation: reveal-on-scroll linear both;
+      animation-timeline: scroll(root);
+      animation-range: 200px 480px;
+    }
+  }
+  @keyframes reveal-on-scroll {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+      visibility: hidden;
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      visibility: visible;
+    }
+  }
+}
