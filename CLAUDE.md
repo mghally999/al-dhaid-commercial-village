@@ -56,7 +56,13 @@ Marketing website for a commercial village (shops, restaurants, cafés, services
 1. Read this file, the content PDF and the Figma frames before writing code.
 2. Propose the page/section structure and component list; wait for approval.
 3. Build section by section, desktop first, then tablet and mobile breakpoints; compare each against the Figma screenshot.
-4. Run `npm run build` and `npm run lint` with no errors before saying a section is done.
+4. Run `pnpm build`, `pnpm lint`, `pnpm typecheck` and `pnpm format:check` with no errors before saying a section is done.
+
+## Tooling (Apple Silicon note: this machine's Node is x64 under Rosetta; start Chrome from the shell so it runs natively)
+- Start Chrome once: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --remote-debugging-port=9333 --user-data-dir=/tmp/chrome-native about:blank &`
+- Full-page screenshot at an exact CSS width (no deps): `node scripts/screenshot.mjs http://localhost:3001/ 403 review/mobile-403.png --mobile --port=9333` (also 768 / 1024 / 1280). Plain headless `--screenshot` cannot go below ~500px wide.
+- Lighthouse (mobile): `pnpm build && pnpm start -p 3001`, then `node scripts/lighthouse.mjs http://localhost:3001/ review/lighthouse-mobile 9333 [simulate|devtools]`. The CLI refuses to launch Chrome from x64 Node, hence the API runner attached to the port above. `review/` is git-ignored.
+- `next dev` runs on :3000; production checks use `next start -p 3001` (security headers, CSP, `next/image` qualities are production-only behaviours).
 
 ## Decisions (approved 2026-09-24 by Sultan, the client's contact — these persist across sessions)
 **Rule:** Sultan approved the Figma design, so **Figma wins for structure**; the PDF is used **only for wording where the same element exists in Figma**.
@@ -79,3 +85,13 @@ Marketing website for a commercial village (shops, restaurants, cafés, services
 - **Fonts**: body/UI = Alexandria; H1/H2 display headings = Noto Kufi Arabic (both from Figma). DM Mono (Figma eyebrows and "01–04" numbers) is dropped; use Alexandria with letter-spacing instead.
 - **Floating WhatsApp** is hidden over the hero and fades in after ~400px of scroll (CSS scroll-driven animation) so it never covers the hero CTAs or the "لأصحاب المشاريع" link. Position: bottom start edge, as in Figma.
 - **Repo hygiene**: `materials/drive-photos/` and `materials/figma-assets/design-images/` are git-ignored. `next dev` agent-rules generation is disabled (`agentRules: false`) so it cannot rewrite this file.
+- **Build notes (2026-09-24, all sections built)**:
+  - Desktop keeps Figma's left-to-right order for the category cards and store cards (`dir="ltr"` on those rows); remove that attribute if an RTL-first order is preferred. The gallery mosaic order follows the RTL flow and already matches Figma.
+  - Join form: the Figma eyebrow "لأصحاب المشاريع" was coral on coral (invisible); rendered at 75% white. Field rows: الاسم الكامل | رقم الهاتف, رقم واتساب | البريد الإلكتروني, نوع النشاط | اسم المشروع, then نبذة. "نوع النشاط" options come from the PDF sentence (متجر، مطعم، مقهى، خدمة، مفهوم تجاري جديد، أخرى).
+  - Category card "مطاعم ومقاهي" pre-selects مطعم in `#destinations` (one card covers two categories); خدمات / فعاليات link unfiltered until stores of those types exist.
+  - Gallery chips are static labels (mobile shows the Figma caption line): only four photos, so filtering would show empty states.
+  - Date/time fields: native inputs with an overlay label ("التاريخ" / "الوقت") while empty; value at the physical left and icon at the right, as drawn in Figma.
+  - Hero: `min-h` 820px on mobile / 800px on desktop (Figma 760) because the PDF paragraph is longer, and the photo layer starts 1px below the section edge. Both keep the first slide as the LCP element (Chrome ignores full-viewport images and would otherwise pick a later slide) and keep the hero from resizing when fonts arrive.
+  - Validation uses `zod/mini` with `z.config({ jitless: true })`: classic zod added ~90 KB gzip to the client and its `new Function` parser violated the CSP.
+  - Forms without `RESEND_API_KEY` / `CONTACT_TO_EMAIL` log the submission on the server and still show the success state. Rate limit: 5 submissions per 10 minutes per IP per form (in-memory, per instance). Honeypot field name: `website`.
+  - Lighthouse mobile on the production build: 97–98 / 100 / 100 / 100 with real ("devtools") throttling (LCP 2.0 s, CLS 0). With the default "simulate" model (what PageSpeed Insights shows) performance is 88 because Lantern charges every resource that finishes before Chrome's local first paint — the two Arabic web fonts (182 KB) and the Next/React runtime (~150 KB gzip) — to the LCP. Only dropping a font (e.g. a lighter body face or one weight) or the framework's client runtime would move that number; the page's own code is a few KB.

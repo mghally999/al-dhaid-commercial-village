@@ -65,3 +65,21 @@
     }
   }
 }
+
+@layer components {
+  /* Scroll reveal: enabled only once RevealObserver has marked in-view elements (see motion/RevealObserver.tsx). */
+  [data-reveal] {
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+  html[data-reveal='ready'] [data-reveal]:not([data-visible]) {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      transition: none;
+    }
+  }
+}

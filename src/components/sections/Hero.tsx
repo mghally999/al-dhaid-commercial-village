@@ -26,10 +26,13 @@ export function Hero() {
         className="bg-amber pointer-events-none absolute end-[88px] top-[182px] size-3 rounded-full md:hidden"
       />
 
-      <Container className="relative z-10 flex min-h-[760px] flex-col pt-6 pb-12">
+      {/* Fixed minimum heights (Figma: 760) leave room for the longer PDF paragraph in both the fallback
+          and the web font, so the hero never resizes when fonts arrive: the first slide stays the LCP
+          element and nothing below shifts. */}
+      <Container className="relative z-10 flex min-h-[820px] flex-col pt-6 pb-12 md:min-h-[800px]">
         <SiteHeader />
 
-        <div className="flex flex-1 flex-col items-start justify-center gap-7 py-10">
+        <div className="flex flex-1 flex-col items-start justify-center gap-6 py-6 md:gap-7 md:py-10">
           <p className="text-amber text-xs leading-4 tracking-[0.2em]" dir="ltr">
             {hero.eyebrow}
           </p>

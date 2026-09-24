@@ -29,7 +29,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  images: { formats: ['image/avif', 'image/webp'], qualities: [65, 75] },
+  images: { formats: ['image/avif', 'image/webp'], qualities: [50, 65, 70, 75] },
   // Do not let `next dev` rewrite CLAUDE.md (it is hand-maintained).
   agentRules: false,
   async headers() {

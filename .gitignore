@@ -59,3 +59,6 @@ Thumbs.db
 # Source material (originals; the images the site uses are already in public/images)
 materials/drive-photos/
 materials/figma-assets/design-images/
+
+# Local review artefacts (screenshots, Lighthouse reports)
+review/

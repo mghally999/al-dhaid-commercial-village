@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { FloatingWhatsApp } from '@/components/layout/FloatingWhatsApp';
 import { siteConfig } from '@/config/site';
 import { alexandria, kufi } from '@/styles/fonts';
 import './globals.css';
@@ -20,7 +19,9 @@ export const metadata: Metadata = {
     title: `${siteConfig.name} | ${siteConfig.tagline}`,
     description: siteConfig.description,
     url: '/',
+    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: siteConfig.name }],
   },
+  twitter: { card: 'summary_large_image' },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48' },
@@ -46,7 +47,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           تخطي إلى المحتوى
         </a>
         {children}
-        <FloatingWhatsApp />
       </body>
     </html>
   );

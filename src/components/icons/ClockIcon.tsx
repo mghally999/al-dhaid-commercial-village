@@ -1,0 +1,25 @@
+import type { SVGProps } from 'react';
+
+/** Figma asset "formkit:time" (16px). */
+export function ClockIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={16}
+      height={16}
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M8 15C4.14 15 1 11.86 1 8C1 4.14 4.14 1 8 1C11.86 1 15 4.14 15 8C15 11.86 11.86 15 8 15ZM8 2C4.69 2 2 4.69 2 8C2 11.31 4.69 14 8 14C11.31 14 14 11.31 14 8C14 4.69 11.31 2 8 2Z"
+      />
+      <path
+        fill="currentColor"
+        d="M10 10.5C9.91 10.5 9.82 10.48 9.74 10.43L7.24 8.93C7.16629 8.88513 7.10545 8.82195 7.06339 8.74659C7.02134 8.67124 6.9995 8.58629 7 8.5V4.5C7 4.22 7.22 4 7.5 4C7.78 4 8 4.22 8 4.5V8.22L10.26 9.57C10.3531 9.62705 10.425 9.7129 10.4649 9.81453C10.5048 9.91615 10.5105 10.028 10.4811 10.1332C10.4517 10.2383 10.3889 10.331 10.302 10.3972C10.2152 10.4634 10.1092 10.4995 10 10.5Z"
+      />
+    </svg>
+  );
+}

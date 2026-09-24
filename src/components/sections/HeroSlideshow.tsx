@@ -51,7 +51,10 @@ export function HeroSlideshow({ slides }: { slides: readonly HeroSlide[] }) {
   }, [slides.length]);
 
   return (
-    <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-30">
+    // top-px: the photo layer starts 1px below the section edge (invisible on the navy background) so
+    // it never covers the whole viewport. Chrome ignores full-viewport images for LCP, which would make
+    // a later slide the page's LCP element on phones where the hero is taller than the screen.
+    <div aria-hidden="true" className="absolute inset-x-0 top-px bottom-0 -z-10 opacity-30">
       {slides.map((slide, i) =>
         mounted.includes(i) ? (
           <Image
@@ -60,9 +63,11 @@ export function HeroSlideshow({ slides }: { slides: readonly HeroSlide[] }) {
             alt=""
             fill
             sizes="100vw"
-            quality={65}
+            quality={50}
             priority={i === 0}
             fetchPriority={i === 0 ? 'high' : 'auto'}
+            // The first slide is the LCP element: decode synchronously so it paints the moment it arrives.
+            decoding={i === 0 ? 'sync' : 'async'}
             style={{ objectPosition: slide.position ?? '50% 50%' }}
             className={`object-cover transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
               i === index ? 'opacity-100' : 'opacity-0'
