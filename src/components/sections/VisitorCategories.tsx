@@ -1,12 +1,23 @@
 import { CategoryCard } from '@/components/cards/CategoryCard';
+import { features } from '@/config/site';
 import { Container } from '@/components/layout/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { categoryCards, visitors } from '@/content/ar/categories';
 import { stores } from '@/content/ar/stores';
+import type { Category } from '@/types/content';
 
 /** Figma 38:60 / 59:54 — "للزوار": heading + two paragraphs, then four numbered category cards. */
 export function VisitorCategories() {
   const present = new Set(stores.map((s) => s.category));
+
+  /**
+   * Each card's "اعرف المزيد" opens the store list filtered to that category. While the list is
+   * hidden the link keeps its place in the design and points at "خطط لزيارتك", the next useful step.
+   */
+  function cardHref(category: Category): string {
+    if (!features.showDestinations) return '#plan-your-visit';
+    return present.has(category) ? `/?type=${category}#destinations` : '#destinations';
+  }
   return (
     <section id="visitors" aria-labelledby="visitors-title" className="bg-cream">
       <Container className="py-24">
@@ -39,11 +50,7 @@ export function VisitorCategories() {
               <CategoryCard
                 card={card}
                 linkLabel={visitors.linkLabel}
-                href={
-                  present.has(card.category)
-                    ? `/?type=${card.category}#destinations`
-                    : '#destinations'
-                }
+                href={cardHref(card.category)}
               />
             </li>
           ))}

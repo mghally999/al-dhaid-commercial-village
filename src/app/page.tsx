@@ -1,4 +1,5 @@
 import { FloatingWhatsApp } from '@/components/layout/FloatingWhatsApp';
+import { features } from '@/config/site';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { RevealObserver } from '@/components/motion/RevealObserver';
 import { About } from '@/components/sections/About';
@@ -19,7 +20,7 @@ export default function HomePage() {
         <Hero />
         <VisitorCategories />
         <WhyVisit />
-        <Destinations />
+        {features.showDestinations ? <Destinations /> : null}
         <PlanVisit />
         <About />
         <Join />

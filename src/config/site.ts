@@ -20,6 +20,19 @@ function resolveSiteUrl(): string {
 }
 
 /**
+ * Feature flags. Flip a value here and everything that depends on it follows: navigation links,
+ * call-to-action targets, the rendered sections and the structured data.
+ */
+export const features = {
+  /**
+   * "اكتشف وجهاتنا" (the store cards) is hidden while the tenants in `src/content/ar/stores.ts`
+   * are still the Figma samples. Set to `true` once real brands are in that file; nothing else
+   * needs editing. Kept as a literal so the bundler drops the filter's client JavaScript too.
+   */
+  showDestinations: false,
+} as const;
+
+/**
  * Single source of truth for site identity and contact details.
  * Every value marked TODO is a placeholder the client has not provided yet.
  */
@@ -32,19 +45,19 @@ export const siteConfig = {
   // TODO: real domain once purchased (set NEXT_PUBLIC_SITE_URL on Vercel). Until then the Vercel URL is used.
   url: resolveSiteUrl(),
   locale: 'ar_AE',
-  // TODO: phone number from the client.
-  phone: '+971500000000',
-  // TODO: WhatsApp number from the client (international format, digits only).
-  whatsapp: '971500000000',
-  // TODO: contact email from the client.
-  email: 'info@example.com',
+  phone: '+971563775188',
+  // International format, digits only (used to build the wa.me link).
+  whatsapp: '971563775188',
+  email: 'Aldhaidvillage.ae@gmail.com',
   address: 'مدينة الذيد – إمارة الشارقة',
-  // TODO: Google Maps link from the client.
-  mapsUrl: 'https://maps.google.com/?q=Al+Dhaid+Sharjah',
+  mapsUrl: 'https://maps.app.goo.gl/mJn3cftBefdqjc3E9',
   // TODO: opening hours are NOT confirmed (the content PDF says "يتم إضافة أوقات العمل"); this is the Figma sample.
   hours: 'يوميًا، 10 صباحًا – 11 مساءً',
-  // TODO: Instagram profile URL from the client.
-  instagram: 'https://www.instagram.com/',
+  // TODO: Instagram profile URL from the client. While this is null the footer link stays hidden
+  // and the profile is left out of the structured data; paste the URL here to bring both back.
+  instagram: null as string | null,
 } as const;
 
 export const whatsappUrl = `https://wa.me/${siteConfig.whatsapp}`;
+export const telUrl = `tel:${siteConfig.phone}`;
+export const mailtoUrl = `mailto:${siteConfig.email}`;

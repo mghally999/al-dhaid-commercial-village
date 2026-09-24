@@ -20,6 +20,7 @@ export function shoppingCenterJsonLd() {
       addressCountry: 'AE',
     },
     hasMap: siteConfig.mapsUrl,
-    sameAs: [siteConfig.instagram],
+    // Only real profiles belong in sameAs; Instagram is added once its URL is known.
+    ...(siteConfig.instagram ? { sameAs: [siteConfig.instagram] } : {}),
   };
 }

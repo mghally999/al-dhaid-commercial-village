@@ -1,3 +1,4 @@
+import { features } from '@/config/site';
 import type { HeroSlide } from '@/types/content';
 
 /** Wording from materials/content/site-content-final.pdf (page 1); structure from Figma 38:7 / 59:11. */
@@ -6,7 +7,11 @@ export const hero = {
   titleLine1: 'قرية الذيد',
   titleLine2: 'التجارية',
   text: 'وجهتك للتسوق، المطاعم وفرص الأعمال. اكتشف وجهة تجارية متكاملة في قلب مدينة الذيد، تجمع بين المتاجر، المطاعم، المقاهي والخدمات، وتوفر في الوقت نفسه فرصًا مميزة لأصحاب المشاريع والعلامات التجارية.',
-  primaryCta: { label: 'اكتشف القرية', href: '#destinations' },
+  primaryCta: {
+    label: 'اكتشف القرية',
+    // Leads to the store list when it exists, otherwise to the visitor categories above it.
+    href: features.showDestinations ? '#destinations' : '#visitors',
+  },
   secondaryCta: { label: 'خطط لزيارتك', href: '#plan-your-visit' },
   partnersLink: { label: 'لأصحاب المشاريع ←', href: '#join' },
   scrollHint: 'مرّر لاكتشاف المزيد ↓',
