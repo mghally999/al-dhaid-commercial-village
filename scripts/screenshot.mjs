@@ -119,11 +119,9 @@ try {
     true,
   );
   await sleep(400);
-  const shot = await send('Page.captureScreenshot', {
-    format: 'png',
-    captureBeyondViewport: true,
-    clip: { x: 0, y: 0, width, height, scale: 1 },
-  });
+  // The viewport already equals the page height, so a plain capture is the full page. (captureBeyondViewport
+  // shifts RTL documents horizontally in current Chrome, so it is deliberately not used.)
+  const shot = await send('Page.captureScreenshot', { format: 'png' });
   writeFileSync(out, Buffer.from(shot.data, 'base64'));
   console.log(`${out}: ${width}x${height}`);
 } finally {
